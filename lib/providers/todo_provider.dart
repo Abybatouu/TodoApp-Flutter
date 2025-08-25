@@ -27,7 +27,7 @@ class TodoProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final data = await _api.getTodos(accountId);             // peut échouer offline
+      final data = await _api.getTodos(accountId);
       _todos = data.map((t) => Todo.fromJson(t)).toList();
       _history = _todos.where((t) => t.done).toList();
       _loadedForAccount = accountId;
@@ -47,7 +47,7 @@ class TodoProvider with ChangeNotifier {
       }).toList());
 
     } catch (_) {
-      // on reste avec les données locales 
+      // pour les données locales 
     } finally {
       _isLoading = false;
       notifyListeners();

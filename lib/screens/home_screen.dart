@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import '../providers/auth_provider.dart';
 import '../providers/todo_provider.dart';
 import '../widgets/todo_item.dart';
-import '../services/meteo_service.dart'; // Service meteo
+import '../services/meteo_service.dart'; // service meteo
 import 'login_screen.dart';
 import 'profile_screen.dart';
 
@@ -31,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
       todos.fetchTodos(auth.user!.accountId);
     }
 
-    // Recuperation automatique ville et de la meteo au demarrage
+    // recuperation automatique ville et de la meteo au demarrage
     _getCity();
   }
 
-  // Recuperation de la ville
+  // recuperation de la ville
   Future<String> getCityName() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -180,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: const InputDecoration(
                   hintText: "Rechercher une tâche...",
                   border: InputBorder.none,
+                  hintStyle: TextStyle(color: Colors.white),
                 ),
                 style: const TextStyle(color: Colors.white),
                 onChanged: (value) => setState(() => _searchQuery = value),
@@ -197,10 +198,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 _isSearching = !_isSearching;
               });
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.my_location, color: Colors.white),
-            onPressed: _getCity,
           ),
           IconButton(
             icon: const Icon(Icons.history, color: Colors.white),

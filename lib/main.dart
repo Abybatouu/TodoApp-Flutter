@@ -4,7 +4,7 @@ import 'providers/auth_provider.dart';
 import 'providers/todo_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/splash_screen.dart'; // Import du splash
+import 'screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Todo App',
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(), // On commence par le splash
+      home: SplashScreen(), // On commence par le splash
     );
   }
 }

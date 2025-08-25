@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../config.dart';
 
 class ApiService {
-  /// ---- LOGIN ----
+  //connexion
   Future<Map<String, dynamic>> login(String email, String password) async {
     final res = await http.post(
       Uri.parse("${baseUrl}post.php?action=login"),
@@ -11,13 +11,13 @@ class ApiService {
       body: jsonEncode({"email": email, "password": password}),
     );
 
-    print("➡️ [LOGIN] STATUS: ${res.statusCode}");
-    print("➡️ [LOGIN] BODY: ${res.body}");
+    print("[LOGIN] STATUS: ${res.statusCode}");
+    print("[LOGIN] BODY: ${res.body}");
 
     return _decode(res.body);
   }
 
-  /// ---- REGISTER ----
+  //inscription
   Future<Map<String, dynamic>> signup(String email, String password) async {
     final res = await http.post(
       Uri.parse("${baseUrl}post.php?action=register"),
@@ -25,13 +25,13 @@ class ApiService {
       body: jsonEncode({"email": email, "password": password}),
     );
 
-    print("➡️ [SIGNUP] STATUS: ${res.statusCode}");
-    print("➡️ [SIGNUP] BODY: ${res.body}");
+    print("[SIGNUP] STATUS: ${res.statusCode}");
+    print("[SIGNUP] BODY: ${res.body}");
 
     return _decode(res.body);
   }
 
-  /// ---- GET TODOS ----
+  // recuperation des todos
   Future<List<dynamic>> getTodos(int accountId) async {
     final res = await http.post(
       Uri.parse("${baseUrl}post.php?action=getTodos"),
@@ -47,7 +47,7 @@ class ApiService {
     return (data['todos'] as List?) ?? [];
   }
 
-  /// ---- INSERT TODO ----
+  //insertion
   Future<Map<String, dynamic>> insertTodo({
     required int accountId,
     required String date,
@@ -71,7 +71,7 @@ class ApiService {
     return _decode(res.body);
   }
 
-  /// ---- UPDATE TODO ----
+  // mis à jour
   Future<Map<String, dynamic>> updateTodo({
     required int todoId,
     required String date,
@@ -89,13 +89,13 @@ class ApiService {
       }),
     );
 
-    print("➡️ [UPDATE TODO] STATUS: ${res.statusCode}");
-    print("➡️ [UPDATE TODO] BODY: ${res.body}");
+    print("[UPDATE TODO] STATUS: ${res.statusCode}");
+    print("[UPDATE TODO] BODY: ${res.body}");
 
     return _decode(res.body);
   }
 
-  /// ---- DELETE TODO ----
+  //suppression
   Future<Map<String, dynamic>> deleteTodo(int todoId) async {
     final res = await http.post(
       Uri.parse("${baseUrl}post.php?action=deleteTodo"),
@@ -103,13 +103,13 @@ class ApiService {
       body: jsonEncode({"todo_id": todoId}),
     );
 
-    print("➡️ [DELETE TODO] STATUS: ${res.statusCode}");
-    print("➡️ [DELETE TODO] BODY: ${res.body}");
+    print("[DELETE TODO] STATUS: ${res.statusCode}");
+    print("[DELETE TODO] BODY: ${res.body}");
 
     return _decode(res.body);
   }
 
-  /// ---- DECODE ----
+  //pour savoir si la reponse est un json
   dynamic _decode(String body) {
     try {
       return json.decode(body);

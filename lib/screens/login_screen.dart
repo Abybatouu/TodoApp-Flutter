@@ -13,7 +13,6 @@ class LoginScreen extends StatelessWidget {
     final password = TextEditingController();
     final auth = Provider.of<AuthProvider>(context, listen: false);
 
-    // Couleurs principales
     const Color darkPurple = Color(0xFF4A148C);
     const Color lightPurple = Color(0xFFBA68C8);
 
@@ -25,7 +24,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Logo
+              // mon logo
               Image.asset(
                 "assets/logo.png",
                 height: 300,

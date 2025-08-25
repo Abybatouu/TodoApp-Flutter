@@ -11,7 +11,7 @@ class Todo {
     required this.done,
   });
 
-  /// Convertir un JSON venant de l'API en objet Todo
+  //Conversion en JSON 
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
       todoId: int.parse(json['todo_id'].toString()),
@@ -21,17 +21,16 @@ class Todo {
     );
   }
 
-  /// Convertir un Todo en JSON pour l'envoyer à l'API
+  //Conversion en JSON 
   Map<String, dynamic> toJson() {
     return {
       "todo_id": todoId,
       "date": date,
       "todo": todo,
-      "done": done ? 1 : 0, // ton API attend probablement 1/0
+      "done": done ? 1 : 0, 
     };
   }
-
-  /// Créer une nouvelle version modifiée du Todo
+  //Méthode pour copier un objet Todo avec des modifications optionnelles
   Todo copyWith({
     int? todoId,
     String? date,

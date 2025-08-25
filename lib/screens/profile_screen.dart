@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadProfileImage();
   }
 
-  // Charger l'image enregistrée localement
+  // image enregistree localement
   Future<void> _loadProfileImage() async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/profile.jpg');
@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // Choisir une image depuis la galerie
+  // choisir une image 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
