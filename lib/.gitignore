@@ -1,0 +1,28 @@
+# Flutter/Dart/Pub stuff
+.dart_tool/
+.packages
+.pub/
+build/
+flutter_*.png
+
+# IntelliJ related
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# VS Code related
+.vscode/
+
+# Mac related
+.DS_Store
+
+# Windows related
+Thumbs.db
+
+# Generated files
+*.lock
+pubspec.lock
+
+# Environment files
+*.env
