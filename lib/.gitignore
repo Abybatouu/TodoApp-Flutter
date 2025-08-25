@@ -1,28 +1,57 @@
-# Flutter/Dart/Pub stuff
+# -----------------------------
+# Flutter/Dart/Pub
+# -----------------------------
 .dart_tool/
 .packages
 .pub/
 build/
-flutter_*.png
+pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+.generated/
+.flutter-plugins-dependencies
 
-# IntelliJ related
+# Ignore assets temporaires ou caches générés
+*.lock
+*.log
+*.tmp
+
+# -----------------------------
+# IDEs
+# -----------------------------
+# IntelliJ / Android Studio
 *.iml
-.idea/
 *.ipr
 *.iws
+.idea/
 
-# VS Code related
+# VS Code
 .vscode/
 
-# Mac related
+# -----------------------------
+# OS files
+# -----------------------------
+# Mac
 .DS_Store
 
-# Windows related
+# Windows
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Generated files
-*.lock
-pubspec.lock
+# -----------------------------
+# Flutter generated images/icons
+# -----------------------------
+# Exemple : icônes Flutter ou splash temporaires
+flutter_*.png
 
+# -----------------------------
+# Packages / cache
+# -----------------------------
+.pub-cache/
+
+# -----------------------------
 # Environment files
+# -----------------------------
 *.env
