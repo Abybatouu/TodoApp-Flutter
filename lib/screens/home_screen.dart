@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart'; // geolocalisation
+import 'package:geocoding/geocoding.dart';
 import '../providers/auth_provider.dart';
 import '../providers/todo_provider.dart';
 import '../widgets/todo_item.dart';
+import '../services/meteo_service.dart'; // Service meteo
 import 'login_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isSearching = false;
   String _searchQuery = "";
+  String _ville = "Position non récupérée";
+  String _meteo = "Météo non récupérée";
 
   @override
   void initState() {
@@ -24,6 +30,60 @@ class _HomeScreenState extends State<HomeScreen> {
     if (auth.user != null) {
       todos.fetchTodos(auth.user!.accountId);
     }
+
+    // Recuperation automatique ville et de la meteo au demarrage
+    _getCity();
+  }
+
+  // Recuperation de la ville
+  Future<String> getCityName() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return "Service de localisation désactivé";
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return "Permission refusée";
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return "Permission refusée définitivement";
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    if (placemarks.isNotEmpty) {
+      return placemarks.first.locality ?? "Ville inconnue";
+    } else {
+      return "Ville introuvable";
+    }
+  }
+
+  Future<void> _getCity() async {
+    String city = await getCityName();
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    String meteoInfo = await MeteoService.getMeteo(
+      position.latitude,
+      position.longitude,
+    );
+
+    setState(() {
+      _ville = city;
+      _meteo = meteoInfo;
+    });
   }
 
   void _addTask(BuildContext context) async {
@@ -139,8 +199,28 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           IconButton(
+            icon: const Icon(Icons.my_location, color: Colors.white),
+            onPressed: _getCity,
+          ),
+          IconButton(
             icon: const Icon(Icons.history, color: Colors.white),
             onPressed: () => _showHistory(context),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ProfileScreen(
+                    email: auth.user?.email ?? "",
+                  ),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -161,31 +241,55 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => _addTask(context),
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: Consumer<TodoProvider>(
-        builder: (context, todos, _) {
-          if (todos.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final displayedTodos = _isSearching
-              ? todos.search(_searchQuery)
-              : todos.todos;
-
-          if (displayedTodos.isEmpty) {
-            return const Center(
-              child: Text(
-                "Aucune tâche pour le moment",
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            );
-          }
-
-          return ListView.builder(
+      body: Column(
+        children: [
+          Container(
             padding: const EdgeInsets.all(12),
-            itemCount: displayedTodos.length,
-            itemBuilder: (_, i) => TodoItem(todo: displayedTodos[i]),
-          );
-        },
+            width: double.infinity,
+            color: Colors.deepPurple.shade50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _ville,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _meteo,
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Consumer<TodoProvider>(
+              builder: (context, todos, _) {
+                if (todos.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final displayedTodos =
+                    _isSearching ? todos.search(_searchQuery) : todos.todos;
+
+                if (displayedTodos.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "Aucune tâche pour le moment",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: displayedTodos.length,
+                  itemBuilder: (_, i) => TodoItem(todo: displayedTodos[i]),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

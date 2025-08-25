@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.todoapp-mergeDebugResources-39:/values-en-rCA/values-en-rCA.xml",
+            "outputFile": "com.example.todoapp-mergeDebugResources-42:/values-en-rCA/values-en-rCA.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ABY FAYE\\.gradle\\caches\\8.10.2\\transforms\\12a085f4af97d8500c9432a48145ea1b\\transformed\\preference-1.2.1\\res\\values-en-rCA\\values-en-rCA.xml",

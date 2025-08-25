@@ -4,13 +4,14 @@ import 'providers/auth_provider.dart';
 import 'providers/todo_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart'; // Import du splash
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('todos_box');   // box pour les tâches hors-ligne
-  await Hive.openBox('history_box'); // box pour l’historique
+  await Hive.openBox('todos_box'); 
+  await Hive.openBox('history_box'); 
   runApp(const Root());
 }
 
@@ -31,14 +32,13 @@ class Root extends StatelessWidget {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Todo App',
       debugShowCheckedModeBanner: false,
-      home: Consumer<AuthProvider>(
-        builder: (_, auth, __) => auth.isAuthenticated ? const HomeScreen() : const LoginScreen(),
-      ),
+      home: const SplashScreen(), // On commence par le splash
     );
   }
 }
